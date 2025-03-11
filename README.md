@@ -40,7 +40,6 @@ pip install flask flask-sqlalchemy flask-scss
 ```bash
 python app.py
 ```
-Or simply click the "Run" button that appears in VS Code when viewing app.py.
 
 The application will be available at `http://127.0.0.1:5000/`.
 
