@@ -1,3 +1,339 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background-color: whitesmoke;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: white;
+  height: 100vh;
+  position: fixed;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.sidebar .logo {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.sidebar .logo h2 {
+  color: #1565c0;
+}
+.sidebar nav ul {
+  list-style: none;
+}
+.sidebar nav ul li a {
+  display: block;
+  padding: 15px 20px;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.sidebar nav ul li a:hover, .sidebar nav ul li a.active {
+  background-color: #1565c0;
+  color: white;
+}
+
+.main-content {
+  margin-left: 250px;
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+.main-content .header {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.main-content .header h1 {
+  color: #1565c0;
+}
+
+.content-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.content-section h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+.content-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.content-section table th,
+.content-section table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+.content-section table th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: 600;
+}
+.content-section table tr:hover {
+  background-color: #f5f5f5;
+}
+.content-section table .no-data {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-style: italic;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.filters select {
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  min-width: 200px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+}
+.filters select:focus {
+  outline: none;
+  border-color: #1565c0;
+}
+.filters select option {
+  padding: 8px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+.pagination button {
+  padding: 8px 15px;
+  border: 1px solid #1565c0;
+  background-color: white;
+  color: #1565c0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.pagination button:hover:not(:disabled) {
+  background-color: #1565c0;
+  color: white;
+}
+.pagination button:disabled {
+  border-color: #e0e0e0;
+  color: #e0e0e0;
+  cursor: not-allowed;
+}
+.pagination span {
+  color: #333;
+  font-size: 14px;
+}
+.pagination select {
+  padding: 6px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+}
+.pagination select:focus {
+  outline: none;
+  border-color: #1565c0;
+}
+
+.add-button {
+  background-color: #1565c0;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.add-button:hover {
+  background-color: #0d47a1;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.popup .popup-content {
+  position: relative;
+  background-color: white;
+  width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.popup .popup-content .close {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+.popup .popup-content h3 {
+  margin-bottom: 20px;
+  color: #1565c0;
+}
+.popup .popup-content form .form-group {
+  margin-bottom: 15px;
+}
+.popup .popup-content form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+.popup .popup-content form .form-group input, .popup .popup-content form .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+.popup .popup-content form .form-group input:focus, .popup .popup-content form .form-group select:focus {
+  outline: none;
+  border-color: #1565c0;
+}
+.popup .popup-content form button[type=submit] {
+  background-color: #1565c0;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+.popup .popup-content form button[type=submit]:hover {
+  background-color: #0d47a1;
+}
+
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.toast {
+  min-width: 250px;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease-in-out;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+.toast.toast-success {
+  background-color: #4caf50;
+  color: white;
+}
+.toast.toast-error {
+  background-color: #f44336;
+  color: white;
+}
+
+.edit-btn, .delete-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  margin-right: 5px;
+}
+
+.edit-btn {
+  background-color: #2196f3;
+}
+.edit-btn:hover {
+  background-color: #1976d2;
+}
+
+.delete-btn {
+  background-color: #f44336;
+}
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+.confirm-dialog {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+}
+.confirm-dialog .confirm-content {
+  position: relative;
+  background-color: white;
+  width: 400px;
+  margin: 200px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.confirm-dialog .confirm-content h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+.confirm-dialog .confirm-content p {
+  margin-bottom: 20px;
+  color: #333;
+}
+.confirm-dialog .confirm-content .confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.confirm-dialog .confirm-content .confirm-buttons button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+}
+.confirm-dialog .confirm-content .confirm-buttons .cancel-btn {
+  background-color: #9e9e9e;
+}
+.confirm-dialog .confirm-content .confirm-buttons .cancel-btn:hover {
+  background-color: #757575;
+}
+.confirm-dialog .confirm-content .confirm-buttons .confirm-btn {
+  background-color: #f44336;
+}
+.confirm-dialog .confirm-content .confirm-buttons .confirm-btn:hover {
+  background-color: #d32f2f;
 }/*# sourceMappingURL=styles.css.map */

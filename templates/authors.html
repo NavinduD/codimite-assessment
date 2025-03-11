@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Author Management - Library MS</title>
+<script src="{{ url_for('static', filename='js/authors.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<main class="main-content">
+  <div class="header">
+    <h1>Library Management System</h1>
+  </div>
+
+  <div id="authors" class="content-section">
+    <h2>Author Management</h2>
+    <button class="add-button" onclick="document.getElementById('authorPopup').style.display='block'">Add Author</button>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if authors %}
+          {% for author in authors %}
+          <tr data-id="{{ author.id }}">
+            <td>{{ author.id }}</td>
+            <td>{{ author.name }}</td>
+            <td>{{ author.email }}</td>
+            <td>
+              <button class="edit-btn" onclick="editAuthor('{{ author.id }}')">Edit</button>
+              <button class="delete-btn" onclick="deleteAuthor('{{ author.id }}')">Delete</button>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="4" class="no-data">No authors available</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Author Popup Form -->
+  <div id="authorPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="document.getElementById('authorPopup').style.display='none'">&times;</span>
+      <h3>Add New Author</h3>
+      <form id="authorForm" onsubmit="submitAuthorForm(event)">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <button type="submit">Add Author</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Author Popup Form -->
+  <div id="editAuthorPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="document.getElementById('editAuthorPopup').style.display='none'">&times;</span>
+      <h3>Edit Author</h3>
+      <form id="editAuthorForm" onsubmit="submitEditAuthorForm(event)">
+        <input type="hidden" id="edit_author_id">
+        <div class="form-group">
+          <label for="edit_name">Name</label>
+          <input type="text" id="edit_name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="edit_email">Email</label>
+          <input type="email" id="edit_email" name="email" required>
+        </div>
+        <button type="submit">Update Author</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
