@@ -28,6 +28,7 @@ def bad_request(error):
 def index():
     return redirect(url_for('authors'))
 
+# Author routes
 @app.route('/authors', methods=['GET', 'POST'])
 def authors():
     if request.method == 'POST':
@@ -58,6 +59,66 @@ def authors():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+@app.route('/authors/<int:id>', methods=['GET'])
+def get_author(id):
+    try:
+        author = Author.query.get(id)
+        if not author:
+            return jsonify({'error': 'Author not found'}), 404
+        return jsonify({
+            'id': author.id,
+            'name': author.name,
+            'email': author.email
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/authors/<int:id>', methods=['PUT'])
+def update_author(id):
+    try:
+        author = Author.query.get(id)
+        if not author:
+            return jsonify({'error': 'Author not found'}), 404
+
+        data = request.get_json()
+        errors = validate_author_data(data)
+        if errors:
+            return jsonify({'errors': errors}), 400
+
+        author.name = data['name']
+        author.email = data['email']
+        db.session.commit()
+        return jsonify({
+            'id': author.id,
+            'name': author.name,
+            'email': author.email
+        })
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/authors/<int:id>', methods=['DELETE'])
+def delete_author(id):
+    try:
+        # Find the author by ID, return 404 if not found
+        author = Author.query.get(id)
+        if not author:
+            return jsonify({'error': 'Author not found'}), 404
+            
+        # Prevent deletion of authors with books linked to them
+        if author.books:
+            return jsonify({
+                'error': 'Cannot delete author. Please delete all books associated with this author first.'
+            }), 400
+            
+        db.session.delete(author)
+        db.session.commit()
+        return jsonify({'message': 'Author deleted successfully'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+# Book routes
 @app.route('/books', methods=['GET', 'POST'])
 def books():
     if request.method == 'POST':
@@ -140,65 +201,6 @@ def books():
                                 total_items=total_items)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
-
-@app.route('/authors/<int:id>', methods=['GET'])
-def get_author(id):
-    try:
-        author = Author.query.get(id)
-        if not author:
-            return jsonify({'error': 'Author not found'}), 404
-        return jsonify({
-            'id': author.id,
-            'name': author.name,
-            'email': author.email
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/authors/<int:id>', methods=['PUT'])
-def update_author(id):
-    try:
-        author = Author.query.get(id)
-        if not author:
-            return jsonify({'error': 'Author not found'}), 404
-
-        data = request.get_json()
-        errors = validate_author_data(data)
-        if errors:
-            return jsonify({'errors': errors}), 400
-
-        author.name = data['name']
-        author.email = data['email']
-        db.session.commit()
-        return jsonify({
-            'id': author.id,
-            'name': author.name,
-            'email': author.email
-        })
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/authors/<int:id>', methods=['DELETE'])
-def delete_author(id):
-    try:
-        # Find the author by ID, return 404 if not found
-        author = Author.query.get(id)
-        if not author:
-            return jsonify({'error': 'Author not found'}), 404
-            
-        # Prevent deletion of authors with books linked to them
-        if author.books:
-            return jsonify({
-                'error': 'Cannot delete author. Please delete all books associated with this author first.'
-            }), 400
-            
-        db.session.delete(author)
-        db.session.commit()
-        return jsonify({'message': 'Author deleted successfully'})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/books/<int:id>', methods=['GET'])
 def get_book(id):
